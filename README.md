@@ -1,0 +1,1 @@
+# 📚 EduTrack – Sistema de Gestión Escolar
