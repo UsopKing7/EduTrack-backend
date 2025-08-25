@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "keywords": [],
-  "author": "",
+  "author": "@UsopDev",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
