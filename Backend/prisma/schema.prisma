@@ -3,13 +3,193 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+/// =====================
+/// ENUMS
+/// =====================
+
+enum Rol {
+  ADMIN
+  PROFESOR
+  ALUMNO
+}
+
+enum TipoNota {
+  EXAMEN
+  PRACTICA
+  TRABAJO
+  PARTICIPACION
+}
+
+enum EstadoMateria {
+  ACTIVA
+  INACTIVA
+  CERRADA
+}
+
+enum EstadoInscripcion {
+  ACTIVA
+  RETIRADO
+  FINALIZADO
+}
+
+/// =====================
+/// USUARIOS
+/// =====================
+
+model User {
+  id_user     String    @id @default(uuid())
+  nombre      String
+  email       String    @unique
+  password    String
+  is_active   Boolean   @default(true)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  // Relaciones
+  profesor    Profesor?
+  alumno      Alumno?
+  token       Token?
+  roles       UserRol[]
+  notasCreadas   Nota[] @relation("NotasCreadas")
+  notasActualizadas Nota[] @relation("NotasActualizadas")
+}
+
+/// =====================
+/// ROLES N:M
+/// =====================
+
+model UserRol {
+  id_user String
+  rol     Rol
+
+  user User @relation(fields: [id_user], references: [id_user])
+
+  @@id([id_user, rol])
+}
+
+/// =====================
+/// TOKENS (auth) 
+/// =====================
+
+model Token {
+  id_token    String   @id @default(uuid())
+  id_user     String   @unique
+  token       String
+  createAt    DateTime @default(now())
+
+  user  User  @relation(fields: [id_user], references: [id_user])
+}
+
+/// =====================
+/// PROFESORES
+/// =====================
+
+model Profesor {
+  id_profesor String  @id @default(uuid())
+  id_user     String  @unique
+  especialidad String?
+
+  // Relaciones
+  user     User    @relation(fields: [id_user], references: [id_user])
+  materias Materia[]
+}
+
+/// =====================
+/// ALUMNOS
+/// =====================
+
+model Alumno {
+  id_alumno String  @id @default(uuid())
+  id_user   String  @unique
+  carrera   String?
+
+  // Relaciones
+  user        User             @relation(fields: [id_user], references: [id_user])
+  inscripciones AlumnoMateria[]
+  notas         Nota[]
+}
+
+/// =====================
+/// MATERIAS
+/// =====================
+
+model Materia {
+  id_materia  String  @id @default(uuid())
+  nombre      String
+  descripcion String?
+  id_profesor String
+  estado      EstadoMateria @default(ACTIVA)
+
+  // Relaciones
+  profesor     Profesor       @relation(fields: [id_profesor], references: [id_profesor])
+  inscripciones AlumnoMateria[]
+  notas         Nota[]
+}
+
+/// =====================
+/// RELACIÓN N:M (Alumno - Materia)
+/// =====================
+
+model AlumnoMateria {
+  id_alumno_materia String @id @default(uuid())
+  id_alumno         String
+  id_materia        String
+  fecha_inscripcion DateTime @default(now())
+  estado            EstadoInscripcion @default(ACTIVA)
+
+  // Relaciones
+  alumno  Alumno  @relation(fields: [id_alumno], references: [id_alumno])
+  materia Materia @relation(fields: [id_materia], references: [id_materia])
+
+  @@unique([id_alumno, id_materia]) // evita inscripciones duplicadas
+}
+
+/// =====================
+/// NOTAS
+/// =====================
+
+model Nota {
+  id_nota    String   @id @default(uuid())
+  id_alumno  String
+  id_materia String
+  valor      Int
+  tipo       TipoNota
+  fecha      DateTime @default(now())
+
+  // Auditoría
+  creado_por       String
+  actualizado_por  String?
+
+  // Relaciones
+  alumno      Alumno  @relation(fields: [id_alumno], references: [id_alumno])
+  materia     Materia @relation(fields: [id_materia], references: [id_materia])
+  creador     User    @relation("NotasCreadas", fields: [creado_por], references: [id_user])
+  actualizador User?  @relation("NotasActualizadas", fields: [actualizado_por], references: [id_user])
+
+  @@index([id_alumno])
+  @@index([id_materia])
+}
+
+/// =====================
+/// HISTORIAL DE NOTAS (opcional pero pro)
+/// =====================
+
+model HistorialNota {
+  id_historial String @id @default(uuid())
+  id_nota      String
+  valor        Int
+  fecha        DateTime @default(now())
+  cambiado_por String
+
+  nota  Nota  @relation(fields: [id_nota], references: [id_nota])
+  user  User  @relation(fields: [cambiado_por], references: [id_user])
 }
