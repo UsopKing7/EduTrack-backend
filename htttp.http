@@ -1,0 +1,8 @@
+POST http://localhost:3333/api/register
+Content-Type: application/json
+
+{
+    "nombre": "Limbert Guarachi Chambi",
+    "email": "1d1d1d1d1@gmail.com",
+    "password": "nicolas9090"
+}

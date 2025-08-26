@@ -61,6 +61,8 @@ model User {
   roles       UserRol[]
   notasCreadas   Nota[] @relation("NotasCreadas")
   notasActualizadas Nota[] @relation("NotasActualizadas")
+
+  HistorialNota HistorialNota[]
 }
 
 /// =====================
@@ -177,6 +179,7 @@ model Nota {
 
   @@index([id_alumno])
   @@index([id_materia])
+  HistorialNota HistorialNota[]
 }
 
 /// =====================
