@@ -13,6 +13,7 @@ export class LoginUserPrisma implements ILoginRepository {
     if (!user) return null
 
     return new Login(
+      user.id_user,
       new Email(user.email),
       new Password(user.password)
     )
