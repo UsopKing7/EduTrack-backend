@@ -1,4 +1,4 @@
-export interface RepositoryRole<T> {
+export interface RepositoryRoleAdmin<T> {
   create(data: T): Promise<T | null>
-  findByRole(role: string): Promise<T | null>
+  findByRole(id_user: string, role: 'ADMIN'): Promise<T | null>
 }
