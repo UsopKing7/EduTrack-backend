@@ -50,4 +50,25 @@ export class CrearUserPrisma implements IUserRepository {
       new Password(user.password)
     )
   }
+
+  async findUsers(): Promise<User[]> {
+    const users = await prisma.user.findMany({
+      include: {
+        roles: {
+          select: {
+            rol: true
+          }
+        }
+      }
+    })
+
+    return users.map(user => {
+      return new User(
+        user.id_user,
+        new Email(user.email),
+        new Nombre(user.nombre),
+        new Password(user.password)
+      )
+    })
+  }
 }

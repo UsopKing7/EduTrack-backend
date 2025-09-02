@@ -10,4 +10,9 @@ export class UserController {
     const user = await usecase.create(req.body)
     return res.status(201).json(user)
   }
+
+  static async findAll(_req: Request, res: Response) {
+    const users = await repo.findUsers()
+    return res.status(200).json(users)
+  }
 }

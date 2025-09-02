@@ -21,4 +21,11 @@ export class CrearUserUseCase {
     return await this.userRepository.create(user)
 
   }
+
+  async findUsers(): Promise<User[]> {
+    const users =await this.userRepository.findUsers()
+    if (!users) throw new Error('No se encontraron usuarios')
+
+    return users
+  }
 }
