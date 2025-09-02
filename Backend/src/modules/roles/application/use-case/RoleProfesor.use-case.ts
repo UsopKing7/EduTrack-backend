@@ -2,6 +2,7 @@ import { RoleRepositoryProfesor } from '@/modules/roles/domain/repositories/IRol
 import { RoleProfesorDTO } from '../dto/roleProfesor'
 import { RoleProfesor } from '../../domain/entities/RoleProfesor'
 import { RoleProfesorError } from '@/core/errors/Role.error'
+
 export class RoleProfesorUseCase {
   constructor(private readonly roleRepository: RoleRepositoryProfesor) {}
 
@@ -12,5 +13,9 @@ export class RoleProfesorUseCase {
     if (rolExists) throw new RoleProfesorError('Role already exists')
 
     return await this.roleRepository.create(rol)
+  }
+
+  async findByRole(id_user: string, rol: 'PROFESOR'): Promise<RoleProfesor | null> {
+    return await this.roleRepository.findByRole(id_user, rol)
   }
 }

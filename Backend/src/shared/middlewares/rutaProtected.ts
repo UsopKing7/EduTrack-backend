@@ -8,8 +8,8 @@ export const rutaProtected = async (req: Request, res: Response, next: NextFunct
   if (!token) throw new Error('No tienes autorizacion')
 
   try {
-    const decoded = jwt.verify(token, SECRET_KEY)
-    req.user = decoded as RequestUser
+    const decoded = jwt.verify(token, SECRET_KEY) as RequestUser
+    req.user = decoded
     next()
   } catch (error) {
     res.status(401).json({ error: 'No tienes autorizacion' })

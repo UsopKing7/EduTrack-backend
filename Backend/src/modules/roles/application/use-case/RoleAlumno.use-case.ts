@@ -14,4 +14,8 @@ export class RoleAlumnoUseCase {
 
     return await this.roleRepository.create(rol)
   }
+
+  async findByRole(id_user: string, rol: 'ALUMNO'): Promise<RolAlumno | null> {
+    return await this.roleRepository.findByRole(id_user, rol)
+  }
 }
