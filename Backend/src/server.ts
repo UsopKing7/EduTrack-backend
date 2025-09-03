@@ -12,5 +12,5 @@ app.use(cookieParser())
 
 app.use('/api', userRoutes)
 app.use('/admin', roleRoutes)
-app.use(errorMiddleware)
 app.use('/api', alumnoRoutes)
+app.use(errorMiddleware)
