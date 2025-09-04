@@ -4,6 +4,7 @@ import { errorMiddleware } from './shared/middlewares/error.middleware'
 import cookieParser from 'cookie-parser'
 import { roleRoutes } from './modules/roles/infrastructure/router/Roles.routes'
 import { alumnoRoutes } from './modules/Alumnos/infrastructure/routes/Alumno.routes'
+import { profesorRoutes } from './modules/Profesor/infrastructure/routes/Profesor.route'
 
 export const app = express()
 app.use(express.json())
@@ -13,4 +14,5 @@ app.use(cookieParser())
 app.use('/api', userRoutes)
 app.use('/admin', roleRoutes)
 app.use('/api', alumnoRoutes)
+app.use('/api', profesorRoutes)
 app.use(errorMiddleware)
