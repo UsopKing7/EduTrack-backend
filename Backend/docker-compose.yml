@@ -22,6 +22,16 @@ services:
       - pgdata:/var/lib/postgres/data
     ports:
       - 5433:5432
+  
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redisdata:/data
+    
 
 volumes:
   pgdata:
+  redisdata:
