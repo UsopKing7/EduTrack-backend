@@ -2,9 +2,13 @@ import { Request, Response } from 'express'
 import { CrearAlumnoUseCase } from '../../application/use-case/crearAlumno.use-case'
 import { CreateAlumnoPrisma } from '../prisma/CreateALumnoPrisma'
 import { RequestError } from '@/core/errors/requestError'
+import { redis } from '@/shared/config/redis'
+import { saveCache, verificache } from '@/shared/utils/redis.utils'
 
 const repo = new CreateAlumnoPrisma()
 const usecase = new CrearAlumnoUseCase(repo)
+
+const key = 'get:alumnos'
 
 export class AlumnoController {
   static async create(req: Request, res: Response): Promise<Response> {
@@ -17,8 +21,13 @@ export class AlumnoController {
   }
 
   static async findAll(_req: Request, res: Response): Promise<Response> {
+    const cache = await redis.get(key)
+    const alumnosCache = verificache(cache)
+    if (alumnosCache !== null) return res.status(200).json(alumnosCache)
+
     const alumnos = await repo.findAll()
-    if (!alumnos) throw new RequestError(404, 'Alumnos not found')
+    const { expire, value } = saveCache(alumnos)
+    await redis.set(key, value, expire)
 
     return res.status(200).json(alumnos)
   }
