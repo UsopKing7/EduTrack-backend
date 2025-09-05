@@ -1,8 +1,8 @@
 import { redis } from "../config/redis"
 import { errorFormat } from "./errorformat"
 
-export const verificache = (cache: any): any | null => {
-  if (!cache) throw new Error('Cache is required')
+export const verificache = (cache: any | null): any | null => {
+  if (!cache) return null
 
   try {
     return JSON.parse(cache)

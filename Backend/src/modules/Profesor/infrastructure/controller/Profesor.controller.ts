@@ -24,7 +24,7 @@ export class ProfesorController {
   }
 
   static async findAll(_req: Request, res: Response): Promise<Response> {
-    const cache = redis.get(key)
+    const cache = await redis.get(key)
     const profesoresCache = verificache(cache)
     if (profesoresCache !== null) return res.status(200).json(profesoresCache)
 

@@ -6,3 +6,4 @@ import { requiresUserRol } from '@/shared/middlewares/admin.middleware'
 export const profesorRoutes = Router()
 
 profesorRoutes.post('/create/profesor/:id_user', rutaProtected, requiresUserRol(['ADMIN']), ProfesorController.create)
+profesorRoutes.get('/profesores', rutaProtected, requiresUserRol(['ADMIN']), ProfesorController.findAll)
