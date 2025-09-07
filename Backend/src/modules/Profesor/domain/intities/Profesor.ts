@@ -2,7 +2,7 @@ import { DomainError } from "@/core/errors/domain.error"
 import { Especialidad } from "@/core/value-objects/Especialidad"
 
 export class Profesor {
-  private readonly id_profesor: string
+  private readonly id_profesor: string | null
   private readonly id_user: string
   private readonly especialidad: Especialidad
 

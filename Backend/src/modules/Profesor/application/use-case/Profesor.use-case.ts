@@ -35,18 +35,19 @@ export class ProfesorUseCase {
     const profesor = await this.profesorReposiory.findById(id_user)
     if (!profesor) throw new ApplicationError('Profesor not found')
 
+    await this.profesorReposiory.deleteProfesor(id_user)
+
     return profesor
   }
 
-  async updateProfesor(data: Profesor): Promise<Profesor | null> {
-    const profesor = await this.profesorReposiory.findById(data.getIdUser)
+  async updateProfesor(data: ProfesorDTO): Promise<Profesor | null> {
+    const profesor = await this.profesorReposiory.findById(data.id_user)
     if (!profesor) throw new ApplicationError('Profesor not found')
 
-    const id_profesor = data.getIdProfesor
-    const id_user = data.getIdUser
-    const especialidad = new Especialidad(data.getEspecialidad.getEspecialidad)
+    const id_profesor = data.id_profesor
+    const especialidad = new Especialidad(data.especialidad)
 
-    const profesorUpdated = new Profesor(id_profesor, id_user, especialidad)
+    const profesorUpdated = new Profesor(id_profesor as string, data.id_user, especialidad)
     return await this.profesorReposiory.updateProfesor(profesorUpdated)
   }
 }

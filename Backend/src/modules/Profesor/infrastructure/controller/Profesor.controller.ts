@@ -34,4 +34,21 @@ export class ProfesorController {
 
     return res.status(200).json(profesores)
   }
+
+  static async deleteProfesor(req: Request, res: Response): Promise<Response> {
+    const { id_user } = req.params
+
+    const profesorDeleted = await usecase.delteProfesor(id_user)
+
+    return res.status(200).json(profesorDeleted)
+  }
+
+  static async updateProfesor(req: Request, res: Response): Promise<Response> {
+    const { id_user } = req.params
+    const { especialidad } = req.body
+
+    const profesorUpdated = await usecase.updateProfesor({ id_user, especialidad })
+
+    return res.status(200).json(profesorUpdated)
+  }
 }
