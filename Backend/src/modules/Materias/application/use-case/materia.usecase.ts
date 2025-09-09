@@ -9,15 +9,14 @@ export class MateriaUseCase {
   constructor(private readonly materiaRepository: IMateriaRepository) {}
 
   async create(data: materiaDTO): Promise<Materia | null> {
-    const id_materia = data.id_materia
     const nombre = new Nombre(data.nombre)
     const descripcion = new Descripcion(data.descripcion)
     const id_profesor = data.id_profesor
 
-    const materiaExists = await this.materiaRepository.findById(id_materia as string)
+    const materiaExists = await this.materiaRepository.findByMateria(nombre.getValue())
     if (materiaExists) throw new ApplicationError('Materia already exists')
 
-    const materia = new Materia(id_materia as string, nombre, descripcion, id_profesor)
+    const materia = new Materia(data.id_materia as string, nombre, descripcion, id_profesor)
 
     return await this.materiaRepository.create(materia)
   }

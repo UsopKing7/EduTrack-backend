@@ -9,16 +9,14 @@ export class Materia {
   private readonly id_profesor: string
 
   constructor(id_materia: string, nombre: Nombre, descripcion: Descripcion, id_profesor: string) {
+    if (!nombre) throw new ValueError('Nombre is required')
     if (!descripcion) throw new ValueError('Descripcion is required')
-    if (descripcion.getDescripcion.length < 3) throw new ValueError('Descripcion must be at least 3 characters')
-    if (typeof descripcion !== 'string') throw new ValueError('Descripcion must be a string')
     if (!id_profesor) throw new ValueError('Id Profesor is required')
-    if (typeof id_profesor !== 'string') throw new ValueError('Id Profesor must be a string')
     
     this.id_materia = id_materia
     this.nombre = nombre
     this.descripcion = descripcion
-    this.id_profesor = id_materia
+    this.id_profesor = id_profesor
   }
 
   get getIdMateria() {

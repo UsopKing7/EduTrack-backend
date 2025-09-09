@@ -10,7 +10,7 @@ export class MateriaController {
   static async create(req: Request, res: Response): Promise<Response> {
     const { id_profesor } = req.params
     if (!id_profesor) throw new RequestError(400, 'ID Profesor is required')
-    
+
     const { nombre, descripcion } = req.body
 
     const materia = await usecase.create({ nombre, descripcion, id_profesor })

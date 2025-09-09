@@ -53,6 +53,30 @@ export class MateriaPrisma implements IMateriaRepository {
     )
   }
 
+  async findByMateria(nombre: string): Promise<Materia | null> {
+    const materia = await prisma.materia.findFirst({
+      where: {
+        nombre: nombre
+      },
+
+      select: {
+        id_materia: true,
+        nombre: true,
+        descripcion: true,
+        id_profesor: true
+      }
+    })
+
+    if (!materia) return null
+
+    return new Materia(
+      materia.id_materia,
+      new Nombre(materia.nombre),
+      new Descripcion(materia.descripcion as string),
+      materia.id_profesor
+    )
+  }
+
   async findAll(): Promise<Materia[]> {
     const materias = await prisma.materia.findMany({
       select: {

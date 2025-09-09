@@ -11,7 +11,7 @@ export class Nombre {
     this.nombre = nombre
   }
 
-  getValue() {
+  getValue(): string {
     return this.nombre
   }
 }
