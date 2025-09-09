@@ -122,7 +122,8 @@ export class MateriaPrisma implements IMateriaRepository {
   async updateMateria(data: Materia): Promise<Materia | null> {
     const materia = await prisma.materia.update({
       where: {
-        id_materia: data.getIdMateria
+        id_materia: data.getIdMateria,
+        id_profesor: data.getIdProfesor
       },
 
       data: {

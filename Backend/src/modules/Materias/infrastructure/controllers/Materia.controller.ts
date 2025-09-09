@@ -17,4 +17,27 @@ export class MateriaController {
 
     return res.status(201).json(materia)
   }
+
+  static async findAll(_req: Request, res: Response): Promise<Response> {
+    const materias = await usecase.findAll()
+    return res.status(200).json(materias)
+  }
+
+  static async deleteMateria(req: Request, res: Response): Promise<Response> {
+    const { id_materia } = req.params
+    if (!id_materia) throw new RequestError(400, 'ID Materia is required')
+
+    const materiaDelete = await usecase.deleteMateria(id_materia)
+    return res.status(200).json(materiaDelete)
+  }
+
+  static async updateMateria(req: Request, res: Response): Promise<Response> {
+    const { id_materia } = req.params
+    const { id_profesor } = req.params
+    if (!id_materia ) throw new RequestError(400, 'ID Materia is required')
+
+    const { nombre, descripcion } = req.body
+    const materiaUpdate = await usecase.updateMateria({ id_materia, nombre, descripcion, id_profesor })
+    return res.status(200).json(materiaUpdate)
+  }
 }
